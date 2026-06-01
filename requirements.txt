@@ -1,0 +1,44 @@
+# ═════════════════════════════════════════════════════════════════
+# POC-45 Attention Economy Revenue Simulator - Full Stack Dependencies
+# ═════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────
+# BACKEND DEPENDENCIES (Python/FastAPI)
+# Install with: pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────────────
+
+# Web Framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+
+# Data Validation
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# Production Server
+gunicorn==21.2.0
+
+# ─────────────────────────────────────────────────────────────────
+# FRONTEND DEPENDENCIES (Node.js/Next.js)
+# Install with: npm install (requires Node.js 18+)
+# ─────────────────────────────────────────────────────────────────
+
+# React & Next.js Framework
+# next>=14.0.0
+# react>=18.0.0
+# react-dom>=18.0.0
+
+# Styling
+# tailwindcss>=3.3.0
+# postcss>=8.4.0
+# autoprefixer>=10.4.0
+
+# Type Safety
+# typescript>=5.0.0
+
+# Note: Frontend dependencies are managed via package.json in the frontend directory.
+# Create a package.json with the above dependencies or run:
+# cd frontend && npm init && npm install next react react-dom tailwindcss postcss autoprefixer typescript
