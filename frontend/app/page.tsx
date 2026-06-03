@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import styles from "./page.module.css";
+import ChartComponent from "../components/ChartComponent"; // Chart component ഇമ്പോർട്ട് ചെയ്തു
 
 export default function AttentionEconomyDashboard() {
   const [data, setData] = useState<any>(null);
@@ -16,15 +17,19 @@ export default function AttentionEconomyDashboard() {
       .then(data => setData(data));
   }, []);
 
-  // 2. Simulator logic (Calling backend API instead of hardcoding)
+  // 2. Simulator logic (Calling backend API)
   const runSimulation = async (params: any) => {
-    const response = await fetch('http://localhost:8000/api/simulator', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ platform_id: selectedId, ...params })
-    });
-    const result = await response.json();
-    setSimResult(result);
+    try {
+      const response = await fetch('http://localhost:8000/api/simulator', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ platform_id: selectedId, ...params })
+      });
+      const result = await response.json();
+      setSimResult(result);
+    } catch (error) {
+      console.error("Error running simulation:", error);
+    }
   };
 
   useEffect(() => {
@@ -37,12 +42,12 @@ export default function AttentionEconomyDashboard() {
 
   return (
     <div className={styles.root}>
-      {/* HEADER - നിലനിർത്തുക */}
+      {/* HEADER */}
       <header className={styles.header}>
         <div className={styles.headerTitle}>Attention Economy Revenue Simulator</div>
       </header>
 
-      {/* മാം ആവശ്യപ്പെട്ട Partition (Sidebar & Main Page) */}
+      {/* Partition (Sidebar & Main Page) */}
       <main className="flex" style={{ display: 'flex', gap: '20px', padding: '20px' }}>
         
         {/* SIDEBAR: Sensitivity Sliders */}
@@ -53,6 +58,7 @@ export default function AttentionEconomyDashboard() {
             <input type="range" min="10" max="3000" value={simParams.dau} 
               onChange={e => setSimParams({...simParams, dau: Number(e.target.value)})} />
             
+            <br /><br />
             <label>Ad Load: {simParams.ad_load}</label>
             <input type="range" min="1" max="40" value={simParams.ad_load} 
               onChange={e => setSimParams({...simParams, ad_load: Number(e.target.value)})} />
@@ -69,7 +75,11 @@ export default function AttentionEconomyDashboard() {
                 <p>Platform Net: ${simResult.platform_net.toFixed(2)}</p>
                 <p>Creator Payout: ${simResult.creator_revenue.toFixed(2)}</p>
               </div>
-              {/* ഇവിടെ നിങ്ങൾക്ക് Recharts ഉപയോഗിച്ച് Charts ചേർക്കാം */}
+              
+              {/* Chart Component ഉപയോഗിക്കുന്നു */}
+              <div style={{ marginTop: '20px' }}>
+                <ChartComponent data={[{ name: 'Revenue', revenue: simResult.daily_revenue }]} />
+              </div>
             </div>
           ) : <p>Running simulation...</p>}
         </section>
