@@ -1,0 +1,91 @@
+from typing import Optional
+
+from .schemas import Platform, VerticalCPM
+
+PLATFORMS_DATA = [
+    {
+        "id": "youtube",
+        "name": "YouTube",
+        "icon": "▶️",
+        "category": "Video",
+        "dau": 122,
+        "session": 40,
+        "adLoad": 12,
+        "cpm": 7.5,
+        "creatorSplit": 55,
+        "color": "#f43f5e",
+    },
+    {
+        "id": "tiktok",
+        "name": "TikTok",
+        "icon": "🎵",
+        "category": "Short Video",
+        "dau": 150,
+        "session": 95,
+        "adLoad": 8,
+        "cpm": 3.5,
+        "creatorSplit": 20,
+        "color": "#06b6d4",
+    },
+    {
+        "id": "instagram",
+        "name": "Instagram",
+        "icon": "📸",
+        "category": "Social",
+        "dau": 500,
+        "session": 29,
+        "adLoad": 14,
+        "cpm": 8.2,
+        "creatorSplit": 15,
+        "color": "#8b5cf6",
+    },
+    {
+        "id": "facebook",
+        "name": "Facebook",
+        "icon": "🟦",
+        "category": "Social",
+        "dau": 2100,
+        "session": 31,
+        "adLoad": 16,
+        "cpm": 6.1,
+        "creatorSplit": 10,
+        "color": "#3b82f6",
+    },
+    {
+        "id": "twitter",
+        "name": "X / Twitter",
+        "icon": "🐦",
+        "category": "Microblogging",
+        "dau": 238,
+        "session": 30,
+        "adLoad": 10,
+        "cpm": 2.1,
+        "creatorSplit": 25,
+        "color": "#9ca3af",
+    },
+    {
+        "id": "snapchat",
+        "name": "Snapchat",
+        "icon": "👻",
+        "category": "Messaging",
+        "dau": 414,
+        "session": 26,
+        "adLoad": 9,
+        "cpm": 2.95,
+        "creatorSplit": 35,
+        "color": "#f59e0b",
+    },
+]
+
+VERTICAL_CPMS_DATA = [
+    {"label": "Finance / Crypto", "value": 52},
+    {"label": "Software / SaaS", "value": 45},
+    {"label": "Real Estate", "value": 38},
+    {"label": "E-Commerce", "value": 15},
+    {"label": "Gaming", "value": 8},
+    {"label": "Entertainment", "value": 4},
+]
+
+
+def find_platform(platform_id: str) -> Optional[Platform]:
+    return next((p for p in PLATFORMS_DATA if p["id"] == platform_id), None)
