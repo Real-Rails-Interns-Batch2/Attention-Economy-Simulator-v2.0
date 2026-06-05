@@ -74,6 +74,26 @@
   line-height: 1.2;
 }
 
+.internshipBox {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border: 1px solid var(--border-bright);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px 12px;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: inline-block;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.internshipBox:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .headerSub {
   font-size: 0.72rem;
   color: var(--text-muted);
@@ -617,244 +637,4 @@
   gap: 16px;
   font-size: 0.72rem;
   color: var(--text-secondary);
-}
-
-.bdDot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  margin-right: 5px;
-}
-
-/* ─── RIGHT PANE ─── */
-.attentionTable {
-  padding: 12px 16px 16px;
-}
-
-.attTableHeader {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 12px;
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-muted);
-  padding: 0 0 8px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 8px;
-}
-
-.attTableRow {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 12px;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-  font-size: 0.8rem;
-  animation: fadeInUp 0.4s ease forwards;
-}
-
-.attTableVal {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-}
-
-.attRank {
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 6px;
-  color: #fff;
-  letter-spacing: 0.02em;
-}
-
-/* ─── CPM LIST ─── */
-.cpmList {
-  padding: 14px 16px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.cpmRow {
-  display: grid;
-  grid-template-columns: 70px 1fr 44px;
-  align-items: center;
-  gap: 10px;
-}
-
-.cpmVertical {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-}
-
-.cpmBar {
-  height: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.cpmFill {
-  height: 100%;
-  border-radius: 3px;
-  width: var(--bar-width, 0%);
-}
-
-.cpmVal {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 0.72rem;
-  text-align: right;
-  font-weight: 600;
-}
-
-/* ─── INSIGHT PANELS ─── */
-.insightPanel {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-}
-
-.insightTitle {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.insightIcon {
-  font-size: 1rem;
-}
-
-.insightList {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.insightItem {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.insightEmoji {
-  font-size: 1.1rem;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.insightItemTitle {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 3px;
-}
-
-.insightItemBody {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-/* ─── RAIL LIST ─── */
-.railList {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.railItem {
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-
-.railDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 4px;
-}
-
-.railBody {
-  flex: 1;
-}
-
-.railEntityRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2px;
-}
-
-.railEntity {
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.railControl {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-
-.railLever {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-}
-
-/* ─── FOOTER ─── */
-.footer {
-  text-align: center;
-  padding: 20px;
-  border-top: 1px solid var(--border);
-  background: var(--bg-secondary);
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  line-height: 1.8;
-}
-
-.footerSub {
-  font-size: 0.68rem;
-  color: #374151;
-}
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 1200px) {
-  .kpiSection {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .mainLayout {
-    grid-template-columns: 1fr;
-  }
-  .platformGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .kpiSection {
-    grid-template-columns: 1fr 1fr;
-  }
-  .simControls {
-    grid-template-columns: 1fr;
-  }
-  .simResults {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .platformGrid {
-    grid-template-columns: 1fr;
-  }
-  .headerTitle {
-    font-size: 0.85rem;
-  }
 }
