@@ -1,35 +1,59 @@
+"""
+─────────────────────────────────────────────────────────────────────
+FASTAPI BACKEND - POC-45 Attention Economy Revenue Simulator
+Phase 2: Local-to-Cloud Mirroring (Backend Service)
+Author: Jaliha Sherin K J | Batch 2 Interns
+─────────────────────────────────────────────────────────────────────
 
-import json
-import os
+API STRUCTURE:
+- GET  /health                  - Health check
+- GET  /                        - Root metadata
+- GET  /api/platforms           - Get all platforms
+- GET  /api/platforms/{platform_id} - Get platform by ID
+- GET  /api/cpm-verticals       - Get CPM data by vertical
+- POST /api/simulator           - Run simulator calculation
+"""
+
 import logging
-import uvicorn
+import os
+import sys
+
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List
-from dotenv import load_dotenv
+from fastapi.responses import JSONResponse
 
+# Import router using absolute package imports to support running from the repo root.
+if __package__ is None:
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    if repo_root not in sys.path:
+        sys.path.insert(0, repo_root)
+
+from backend.routers import api_router
+
+# Load environment variables
 load_dotenv()
+
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="POC-45 Revenue Simulator API")
+# ═══════════════════════════════════════════════════════════════════
+# FASTAPI APPLICATION SETUP
+# ═══════════════════════════════════════════════════════════════════
 
-# Load Data from data.json
-def load_data():
-    file_path = os.path.join(os.path.dirname(__file__), 'data.json')
-    try:
-        with open(file_path, 'r') as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {"platforms": [], "verticals": []}
+app = FastAPI(
+    title="POC-45 Revenue Simulator API",
+    description="Attention Economy Revenue Simulator Backend",
+    version="1.0.0",
+)
 
-data = load_data()
-PLATFORMS_DATA = data.get("platforms", [])
-VERTICAL_CPMS_DATA = data.get("verticals", [])
+# ─────────────────────────────────────────────────────────────────
+# CORS CONFIGURATION (Allow Docker container and local requests)
+# ─────────────────────────────────────────────────────────────────
 
-# CORS Configuration
 cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
@@ -38,79 +62,44 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Pydantic Models
-class Platform(BaseModel):
-    id: str
-    name: str
-    icon: str
-    category: str
-    dau: int
-    session: int
-    adLoad: int
-    cpm: float
-    creatorSplit: int
-    color: str
+# Register API router
+app.include_router(api_router)
 
-class SimulatorRequest(BaseModel):
-    platform_id: str
-    dau: int
-    session: int
-    ad_load: int
-    cpm: float
 
-class SimulatorResponse(BaseModel):
-    total_hours: float
-    total_impressions: float
-    daily_revenue: float
-    annual_run_rate: float
-    creator_revenue: float
-    platform_net: float
+@app.get("/health", tags=["Health"])
+async def health_check():
+    """Health endpoint used by containers and monitoring checks."""
+    return {"status": "healthy", "service": "poc45-backend"}
 
-class VerticalCPM(BaseModel):
-    label: str
-    value: int
 
-# API Routes
-@app.get("/api/platforms", response_model=List[Platform])
-async def get_platforms():
-    return PLATFORMS_DATA
+@app.get("/", tags=["Root"])
+async def root():
+    """Root endpoint with API metadata."""
+    return {
+        "name": "POC-45 Revenue Simulator API",
+        "version": "1.0.0",
+        "author": "Jaliha Sherin K J | Batch 2 Interns",
+        "docs": "/docs",
+        "redoc": "/redoc",
+    }
 
-@app.get("/api/platforms/{platform_id}", response_model=Platform)
-async def get_platform(platform_id: str):
-    platform = next((p for p in PLATFORMS_DATA if p["id"] == platform_id), None)
-    if not platform:
-        raise HTTPException(status_code=404, detail="Platform not found")
-    return platform
 
-@app.get("/api/cpm-verticals", response_model=List[VerticalCPM])
-async def get_cpm_verticals():
-    return VERTICAL_CPMS_DATA
-
-@app.post("/api/simulator", response_model=SimulatorResponse)
-async def run_simulator(request: SimulatorRequest):
-    platform = next((p for p in PLATFORMS_DATA if p["id"] == request.platform_id), None)
-    if not platform:
-        raise HTTPException(status_code=404, detail="Platform not found")
-    
-    # Synthetic logic: Calculations based on user input
-    total_hours = (request.dau * 1_000_000 * request.session) / 60
-    total_impressions = total_hours * request.ad_load
-    daily_revenue = (total_impressions / 1000) * request.cpm
-    
-    # Using the split percentage defined in platform data
-    creator_split_pct = platform.get("creatorSplit", 50)
-    creator_revenue = daily_revenue * (creator_split_pct / 100)
-    platform_net = daily_revenue - creator_revenue
-    annual_run_rate = (daily_revenue * 365) / 1_000_000_000
-    
-    return SimulatorResponse(
-        total_hours=total_hours,
-        total_impressions=total_impressions,
-        daily_revenue=daily_revenue,
-        annual_run_rate=annual_run_rate,
-        creator_revenue=creator_revenue,
-        platform_net=platform_net
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request, exc):
+    """Custom HTTP exception handler."""
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
     )
 
+
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import uvicorn
+
+    # റൺ ചെയ്യാൻ ഈ രീതി ഉപയോഗിക്കുക
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=8000,
+        reload=os.getenv("ENVIRONMENT") != "docker",
+    )
